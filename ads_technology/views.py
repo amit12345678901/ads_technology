@@ -7,3 +7,10 @@ def home(request):
         'obj': obj  # Pass the fetched objects to the template
     }
     return render(request, 'home.html', context)
+
+def login(request):
+    return render(request, 'login.html')
+
+def home1(request):
+    return render(request, 'home2.html')
+

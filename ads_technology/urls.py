@@ -22,7 +22,10 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.home, name='home'),  # Added a name for easier reverse lookups
+    path('', views.home, name='home'),
+    path('login', views.login, name='login'), # Added a name for easier reverse lookups
+    path('home2', views.home1, name='home2')
+
 ]
 
 # Add media URL patterns for serving uploaded media files
