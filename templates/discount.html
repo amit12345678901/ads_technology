@@ -1,6 +1,7 @@
-<section>
+<!-- <section>
+
     <div class="container-lg">
-      <!-- background: url('images/banner-newsletter.jpg') no-repeat; background-size: cover; -->
+      background: url('images/banner-newsletter.jpg') no-repeat; background-size: cover;
       <div class="bg-secondary text-light py-5 my-5" style="">
         <div class="container">
           <div class="row justify-content-center">
@@ -21,6 +22,10 @@
                   <label for="email" class="form-label d-none">Email</label>
                   <input type="email" class="form-control form-control-md rounded-0" name="email" id="email" placeholder="Email Address">
                 </div>
+                <div class="mb-3">
+                  <label for="phone" class="form-label d-none">Email</label>
+                  <input type="text" class="form-control form-control-md rounded-0" name="phone" id="email" placeholder="phone NO">
+                </div>
                 <div class="d-grid gap-2">
                   <button type="submit" class="btn btn-dark btn-md rounded-0">Submit</button>
                 </div>
@@ -34,4 +39,109 @@
       </div>
       
     </div>
-  </section>
+  </section> -->
+
+
+
+
+
+
+<section>
+  <div class="container-lg">
+    <div class="bg-secondary text-light py-5 my-5">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-md-5 p-3">
+            <div class="section-header">
+              <h2 class="section-title display-5 text-light">Get 25% Discount on your first purchase</h2>
+            </div>
+            <p>Just Sign Up & Register now to become a member.</p>
+          </div>
+          <div class="col-md-5 p-3">
+            <form id="contactForm" method="POST">
+              {% csrf_token %}
+              <div class="mb-3">
+                <label for="name" class="form-label d-none">Name</label>
+                <input type="text" class="form-control form-control-md rounded-0" name="name" id="name"
+                  placeholder="Name">
+              </div>
+              <div class="mb-3">
+                <label for="email" class="form-label d-none">Email</label>
+                <input type="email" class="form-control form-control-md rounded-0" name="email" id="email"
+                  placeholder="Email Address">
+              </div>
+              <div class="mb-3">
+                <label for="phone" class="form-label d-none">Phone</label>
+                <input type="text" class="form-control form-control-md rounded-0" name="phone" id="phone"
+                  placeholder="Phone No">
+              </div>
+              <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-dark btn-md rounded-0">Submit</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.getElementById('contactForm').addEventListener('submit', function (event) {
+    event.preventDefault(); // Prevent default form submission
+
+    // Get form values
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const phone = document.getElementById('phone').value;
+
+    // Frontend validation
+    let errors = [];
+    if (!name) {
+      errors.push("Name is required.");
+    } else {
+      const nameRegex = /^[A-Za-z\s]+$/; // Allows only letters and spaces
+      if (!nameRegex.test(name)) {
+        errors.push("Name cannot contain numbers or special characters.");
+      }
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email || !emailRegex.test(email)) {
+      errors.push("Enter a valid email.");
+    }
+    const phoneRegex = /^\+?\d{7,15}$/;
+    if (!phone || !phoneRegex.test(phone)) {
+      errors.push("Enter a valid phone number with 7-15 digits.");
+    }
+
+    if (errors.length > 0) {
+      alert(errors.join("\n"));
+      return;
+    }
+
+    // Proceed with form submission via AJAX
+    const formData = new FormData(this);
+    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+    fetch("{% url 'contact' %}", {
+      method: 'POST',
+      body: formData,
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest',
+        'X-CSRFToken': csrftoken,
+      },
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (data.message) {
+          alert(data.message);
+        } else if (data.errors) {
+          alert('Form submission failed: ' + JSON.stringify(data.errors));
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('Form submission failed.');
+      });
+  });
+</script>

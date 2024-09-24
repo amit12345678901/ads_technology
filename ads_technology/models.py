@@ -1,7 +1,9 @@
 from django.db import models
 from django.utils.text import slugify
-from django.utils.text import slugify  # Import slugify
+from django import forms
+import re
 
+# Models
 class Carausel(models.Model):
     title = models.CharField(max_length=150)
     description = models.TextField(max_length=100)
@@ -10,7 +12,6 @@ class Carausel(models.Model):
     def __str__(self):
         return self.title
 
-
 class Category(models.Model):
     name = models.CharField(max_length=255)
     image = models.ImageField(upload_to='categories/')
@@ -18,7 +19,7 @@ class Category(models.Model):
     dec = models.CharField(max_length=150, verbose_name="Description")
 
     def __str__(self):
-        return f"{self.name}: {self.dec}"  # Return both name and description
+        return f"{self.name}: {self.dec}"
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -28,8 +29,6 @@ class Category(models.Model):
     def get_absolute_url(self):
         return f"/category/{self.slug}/"
 
-
-# ads_technology/models.py
 class Product(models.Model):
     title = models.CharField(max_length=255)
     image = models.ImageField(upload_to='products/')
@@ -42,3 +41,18 @@ class Product(models.Model):
     def __str__(self):
         return self.title
 
+# Form Definition (inside models.py)
+
+class Contact(models.Model):
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+    phone = models.CharField(max_length=15)
+
+    def __str__(self):
+        return f"{self.name} ({self.email})"
+
+    def clean(self):
+        # Validate phone number format before saving to the database
+        phone = self.phone
+        if not re.match(r'^\+?\d{7,15}$', phone):
+            raise ValidationError("Enter a valid phone number with 7-15 digits.")
