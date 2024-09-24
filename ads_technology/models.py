@@ -27,3 +27,18 @@ class Category(models.Model):
 
     def get_absolute_url(self):
         return f"/category/{self.slug}/"
+
+
+# ads_technology/models.py
+class Product(models.Model):
+    title = models.CharField(max_length=255)
+    image = models.ImageField(upload_to='products/')
+    original_price = models.DecimalField(max_digits=10, decimal_places=2)
+    discounted_price = models.DecimalField(max_digits=10, decimal_places=2)
+    review_count = models.PositiveIntegerField()
+    discount_percentage = models.PositiveIntegerField()
+    rating = models.FloatField()  # Rating out of 5
+
+    def __str__(self):
+        return self.title
+
