@@ -1,0 +1,15 @@
+.carousel-item {
+    height: 400px; /* Set fixed height */
+}
+
+.carousel-item img {
+    height: 50%; /* Ensure images cover the height */
+    width: auto;  /* Keep aspect ratio */
+    object-fit: cover; /* Cover the item area */
+}
+
+@media (max-width: 768px) {
+    .carousel-item {
+        height: 200px; /* Adjust height for smaller screens */
+    }
+}
