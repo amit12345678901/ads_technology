@@ -23,9 +23,10 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.home, name='home'),
-    path('login', views.login, name='login'), # Added a name for easier reverse lookups
-    path('home2', views.home1, name='home2')
-
+    path('login/', views.login, name='login'),  # Added trailing slash for consistency
+    path('home2/', views.home1, name='home2'),  # Added trailing slash for consistency
+    # path('categories/', views.category_list, name='category_list'),  # Uncomment if you want this route
+    path('category/<slug:slug>/', views.category_detail, name='category_detail'),
 ]
 
 # Add media URL patterns for serving uploaded media files
